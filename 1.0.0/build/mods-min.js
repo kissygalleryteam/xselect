@@ -1,0 +1,1 @@
+KISSY.config("modules",{"kg/xselect/1.0.0/index":{requires:["node","node","base","xtemplate"]}});
