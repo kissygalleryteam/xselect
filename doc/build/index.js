@@ -1,5 +1,5 @@
 /*
-Wed Sep 24 2014 17:03:33 GMT+0800 (CST)
+Fri Sep 26 2014 17:23:46 GMT+0800 (CST)
 combined files by KMD:
 
 index.js
@@ -21,9 +21,12 @@ var xSelect = Base.extend(
 
             me._renderUI();
             me._bindUI();
+
             me.fire('afterRenderUI');
 
             me.sync();
+
+            me._resizeFix();
         },
 
         _renderUI: function () {
@@ -71,13 +74,22 @@ var xSelect = Base.extend(
                 .on('mouseenter', function (ev) {
                     me.set('active', true);
                     root.css('overflow', 'hidden');
+
+                    me.set('pos',
+                        me.get('elDrop').offset()
+                    );
                 })
                 .on('mouseleave', function (ev) {
                     me.set('active', false);
                     root.css('overflow', '');
+
+                    me.set('pos',
+                        me.get('elDrop').offset()
+                    );
                 })
                 .delegate('click', '.xselect-option', function (ev) {
                     ev.halt();
+                    me.fire('select');
                     me.select($(ev.currentTarget).attr('data-index'), true);
                 })
                 .appendTo('body');
@@ -165,14 +177,14 @@ var xSelect = Base.extend(
                 }
 
                 timer = setTimeout(function () {
-                    me.set('pos',
-                        me.get('elDrop').offset()
-                    );
-
                     me.set('size', {
                         width: me.get('elDrop').outerWidth(),
                         height: me.get('elDrop').innerHeight()
                     });
+
+                    me.set('pos',
+                        me.get('elDrop').offset()
+                    );
                 }, 250);
             });
 
@@ -345,6 +357,17 @@ var xSelect = Base.extend(
                         v = this.get('elDrop').offset();
                     }
                     return v;
+                },
+                setter: function (v) {
+                    var size = this.get('size'), popup = this.get('elPopup');
+
+                    if (this.get('opened')) {
+                        popup.css({
+                            'left': v.left,
+                            'top': v.top + size.height + 1,
+                            'width': size.width - 2
+                        });
+                    }
                 }
             },
             size: {
@@ -397,29 +420,29 @@ var xSelect = Base.extend(
         },
         DROP_TMPL: new XTemplate(
             '<span class="xselect-title">请选择</span>'+
-                '<i class="xselect-drop-icon"></i>'
+            '<i class="xselect-drop-icon"></i>'
         ),
         POPUP_TMPL: new XTemplate(
             '<div class="xselect-options">'+
                 '<ul class="xselect-list"></ul>'+
-                '</div>'+
-                '{{#if addForm}}'+
+            '</div>'+
+            '{{#if addForm}}'+
                 '<form class="xselect-addoption">'+
-                '<input id="xselect_ipt" class="xselect-addoption-ipt" placeholder="{{addForm.placeholder}}" {{#if addForm.maxlength}}maxlength="{{addForm.maxlength}}"{{/if}}>'+
-                '<button type="submit" class="xselect-addoption-btn xselect-addoption-btn-disabled">确定</button>'+
+                    '<input id="xselect_ipt" class="xselect-addoption-ipt" placeholder="{{addForm.placeholder}}" {{#if addForm.maxlength}}maxlength="{{addForm.maxlength}}"{{/if}}>'+
+                    '<button type="submit" class="xselect-addoption-btn xselect-addoption-btn-disabled">确定</button>'+
                 '</form>'+
-                '{{/if}}'
+            '{{/if}}'
         ),
         OPTION_TMPL: new XTemplate(
             '{{#each options}}'+
                 '{{^if as_placeholder}}'+
                 '<li>'+
-                '<a class="xselect-option {{#if xindex===selectedIndex}}xselect-option-selected{{/if}}" data-index="{{xindex}}" href="javascript:void(0);" title="{{text}}">'+
-                '{{text}}'+
-                '</a>'+
+                    '<a class="xselect-option {{#if xindex===selectedIndex}}xselect-option-selected{{/if}}" data-index="{{xindex}}" href="javascript:void(0);" title="{{text}}">'+
+                        '{{text}}'+
+                    '</a>'+
                 '</li>'+
                 '{{/if}}'+
-                '{{/each}}'
+            '{{/each}}'
         )
     }
 );
