@@ -1,5 +1,5 @@
 /*
-Fri Sep 26 2014 17:19:18 GMT+0800 (CST)
+Fri Sep 26 2014 17:23:46 GMT+0800 (CST)
 combined files by KMD:
 
 index.js
@@ -89,6 +89,7 @@ var xSelect = Base.extend(
                 })
                 .delegate('click', '.xselect-option', function (ev) {
                     ev.halt();
+                    me.fire('select');
                     me.select($(ev.currentTarget).attr('data-index'), true);
                 })
                 .appendTo('body');
@@ -358,12 +359,12 @@ var xSelect = Base.extend(
                     return v;
                 },
                 setter: function (v) {
-                    var pos = v, size = this.get('size'), popup = this.get('elPopup');
+                    var size = this.get('size'), popup = this.get('elPopup');
 
                     if (this.get('opened')) {
                         popup.css({
-                            'left': pos.left,
-                            'top': pos.top + size.height + 1,
+                            'left': v.left,
+                            'top': v.top + size.height + 1,
                             'width': size.width - 2
                         });
                     }
@@ -419,29 +420,29 @@ var xSelect = Base.extend(
         },
         DROP_TMPL: new XTemplate(
             '<span class="xselect-title">请选择</span>'+
-                '<i class="xselect-drop-icon"></i>'
+            '<i class="xselect-drop-icon"></i>'
         ),
         POPUP_TMPL: new XTemplate(
             '<div class="xselect-options">'+
                 '<ul class="xselect-list"></ul>'+
-                '</div>'+
-                '{{#if addForm}}'+
+            '</div>'+
+            '{{#if addForm}}'+
                 '<form class="xselect-addoption">'+
-                '<input id="xselect_ipt" class="xselect-addoption-ipt" placeholder="{{addForm.placeholder}}" {{#if addForm.maxlength}}maxlength="{{addForm.maxlength}}"{{/if}}>'+
-                '<button type="submit" class="xselect-addoption-btn xselect-addoption-btn-disabled">确定</button>'+
+                    '<input id="xselect_ipt" class="xselect-addoption-ipt" placeholder="{{addForm.placeholder}}" {{#if addForm.maxlength}}maxlength="{{addForm.maxlength}}"{{/if}}>'+
+                    '<button type="submit" class="xselect-addoption-btn xselect-addoption-btn-disabled">确定</button>'+
                 '</form>'+
-                '{{/if}}'
+            '{{/if}}'
         ),
         OPTION_TMPL: new XTemplate(
             '{{#each options}}'+
                 '{{^if as_placeholder}}'+
                 '<li>'+
-                '<a class="xselect-option {{#if xindex===selectedIndex}}xselect-option-selected{{/if}}" data-index="{{xindex}}" href="javascript:void(0);" title="{{text}}">'+
-                '{{text}}'+
-                '</a>'+
+                    '<a class="xselect-option {{#if xindex===selectedIndex}}xselect-option-selected{{/if}}" data-index="{{xindex}}" href="javascript:void(0);" title="{{text}}">'+
+                        '{{text}}'+
+                    '</a>'+
                 '</li>'+
                 '{{/if}}'+
-                '{{/each}}'
+            '{{/each}}'
         )
     }
 );
