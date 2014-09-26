@@ -1,11 +1,11 @@
 /*
-Fri Sep 26 2014 17:23:46 GMT+0800 (CST)
+Fri Sep 26 2014 17:33:25 GMT+0800 (CST)
 combined files by KMD:
 
 index.js
 */
 
-KISSY.add('kg/xselect/1.0.0/index',["node","node","base","xtemplate"],function(S ,require, exports, module) {
+KISSY.add('kg/xselect/1.0.2/index',["node","node","base","xtemplate"],function(S ,require, exports, module) {
 
 var $ = require('node').one;
 var $$ = require('node').all;
